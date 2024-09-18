@@ -89,15 +89,22 @@ class UUIDMinerBloc extends Bloc<UUIDMinerEvent, UUIDMinerState> {
 
   Stream<void> _mineUUIDs(String pattern) async* {
     int attempts = 0;
+    const int batchSize = 1000;
     while (state.isMining) {
-      String generatedUUID = _uuid.v4();
-      attempts++;
+      List<String> uuids = List.generate(batchSize, (_) => _uuid.v4());
+      
+      for (String generatedUUID in uuids) {
+        attempts++;
+        
+        if (attempts % 10 == 0) {
+          emit(state.copyWith(attempts: attempts, currentUUID: generatedUUID));
+        }
 
-      emit(state.copyWith(attempts: attempts, currentUUID: generatedUUID));  // Update this line
-
-      if (generatedUUID.toLowerCase().contains(pattern)) {
-        emit(state.copyWith(minedUUID: generatedUUID));
-        break;
+        if (generatedUUID.toLowerCase().contains(pattern)) {
+          // Update both minedUUID and currentUUID with the final value
+          emit(state.copyWith(minedUUID: generatedUUID, attempts: attempts, currentUUID: generatedUUID));
+          return;
+        }
       }
 
       // Yield to the event loop to keep the UI responsive

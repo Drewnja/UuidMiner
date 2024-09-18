@@ -110,7 +110,7 @@ class _UUIDMinerPageState extends State<UUIDMinerPage> {
                           builder: (context, state) {
                             return Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                              child: UUIDSlotMachine(uuid: state.currentUUID),
+                              child: UUIDSlotMachine(uuid: state.currentUUID, isMining: state.isMining),
                             );
                           },
                         ),
@@ -275,8 +275,9 @@ class _UUIDMinerPageState extends State<UUIDMinerPage> {
 
 class UUIDSlotMachine extends StatelessWidget {
   final String uuid;
+  final bool isMining;
 
-  const UUIDSlotMachine({Key? key, required this.uuid}) : super(key: key);
+  const UUIDSlotMachine({Key? key, required this.uuid, required this.isMining}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -292,7 +293,7 @@ class UUIDSlotMachine extends StatelessWidget {
         spacing: 2,
         runSpacing: 2,
         children: uuid.split('').map((char) {
-          return SlotMachineChar(char: char);
+          return SlotMachineChar(char: char, isMining: isMining);
         }).toList(),
       ),
     );
@@ -301,8 +302,9 @@ class UUIDSlotMachine extends StatelessWidget {
 
 class SlotMachineChar extends StatelessWidget {
   final String char;
+  final bool isMining;
 
-  const SlotMachineChar({Key? key, required this.char}) : super(key: key);
+  const SlotMachineChar({Key? key, required this.char, required this.isMining}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
