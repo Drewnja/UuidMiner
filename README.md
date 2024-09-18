@@ -14,7 +14,7 @@ A Flutter app that mines UUIDs based on user-defined patterns. Spin the virtual 
 
 > "Science isn't about WHY. It's about WHY NOT."
 > 
-> — Cave Johnson 🥼🧪
+> — Cave Johnson 🥼
 
 ## Getting Started 🚀
 

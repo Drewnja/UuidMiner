@@ -92,6 +92,9 @@ class _UUIDMinerPageState extends State<UUIDMinerPage> {
                         TextField(
                           controller: _patternController,
                           style: const TextStyle(color: Colors.white),
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(RegExp(r'[a-fA-F0-9-]')),
+                          ],
                           decoration: const InputDecoration(
                             labelText: 'Enter UUID pattern',
                             labelStyle: TextStyle(color: Colors.white70),
@@ -110,7 +113,11 @@ class _UUIDMinerPageState extends State<UUIDMinerPage> {
                           builder: (context, state) {
                             return Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                              child: UUIDSlotMachine(uuid: state.currentUUID, isMining: state.isMining),
+                              child: UUIDSlotMachine(
+                                uuid: state.currentUUID,
+                                isMining: state.isMining,
+                                pattern: _patternController.text,
+                              ),
                             );
                           },
                         ),
@@ -276,8 +283,14 @@ class _UUIDMinerPageState extends State<UUIDMinerPage> {
 class UUIDSlotMachine extends StatelessWidget {
   final String uuid;
   final bool isMining;
+  final String pattern;
 
-  const UUIDSlotMachine({Key? key, required this.uuid, required this.isMining}) : super(key: key);
+  const UUIDSlotMachine({
+    Key? key,
+    required this.uuid,
+    required this.isMining,
+    required this.pattern,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -292,19 +305,40 @@ class UUIDSlotMachine extends StatelessWidget {
         alignment: WrapAlignment.center,
         spacing: 2,
         runSpacing: 2,
-        children: uuid.split('').map((char) {
-          return SlotMachineChar(char: char, isMining: isMining);
+        children: uuid.split('').asMap().entries.map((entry) {
+          final index = entry.key;
+          final char = entry.value;
+          final isHighlighted = _isCharHighlighted(index);
+          return SlotMachineChar(char: char, isMining: isMining, isHighlighted: isHighlighted);
         }).toList(),
       ),
     );
+  }
+
+  bool _isCharHighlighted(int index) {
+    if (pattern.isEmpty) return false;
+    
+    int patternStart = uuid.toLowerCase().indexOf(pattern.toLowerCase());
+    
+    if (patternStart == -1) return false;
+    
+    int patternEnd = patternStart + pattern.length - 1;
+    
+    return index >= patternStart && index <= patternEnd;
   }
 }
 
 class SlotMachineChar extends StatelessWidget {
   final String char;
   final bool isMining;
+  final bool isHighlighted;
 
-  const SlotMachineChar({Key? key, required this.char, required this.isMining}) : super(key: key);
+  const SlotMachineChar({
+    Key? key,
+    required this.char,
+    required this.isMining,
+    required this.isHighlighted,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -312,7 +346,7 @@ class SlotMachineChar extends StatelessWidget {
       width: 18,
       height: 30,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isHighlighted ? Colors.green[100] : Colors.white,
         border: Border.all(color: Colors.black),
         borderRadius: BorderRadius.circular(3),
       ),
@@ -347,7 +381,11 @@ class SlotMachineChar extends StatelessWidget {
         child: Text(
           char,
           key: ValueKey<String>(char),
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: isHighlighted ? Colors.green[800] : Colors.black,
+          ),
         ),
       ),
     );
