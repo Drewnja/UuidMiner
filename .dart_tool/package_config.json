@@ -92,6 +92,12 @@
       "languageVersion": "3.3"
     },
     {
+      "name": "http_parser",
+      "rootUri": "file:///Users/air/.pub-cache/hosted/pub.dev/http_parser-4.0.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "leak_tracker",
       "rootUri": "file:///Users/air/.pub-cache/hosted/pub.dev/leak_tracker-10.0.5",
       "packageUri": "lib/",
@@ -150,6 +156,12 @@
       "rootUri": "file:///Users/air/.pub-cache/hosted/pub.dev/provider-6.1.2",
       "packageUri": "lib/",
       "languageVersion": "2.12"
+    },
+    {
+      "name": "shelf",
+      "rootUri": "file:///Users/air/.pub-cache/hosted/pub.dev/shelf-1.4.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
     },
     {
       "name": "sky_engine",
@@ -230,7 +242,7 @@
       "languageVersion": "3.5"
     }
   ],
-  "generated": "2024-09-18T14:29:49.783208Z",
+  "generated": "2024-09-19T09:25:09.771365Z",
   "generator": "pub",
   "generatorVersion": "3.5.1",
   "flutterRoot": "file:///usr/local/Caskroom/flutter/3.19.5/flutter",
